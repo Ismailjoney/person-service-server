@@ -63,7 +63,7 @@ async function run() {
             const resualt = await feedbackCollection.insertOne(feedback);
             res.send(resualt)
         })
-        const {user} = useContext(AuthorContext)
+         
 
         //get data from specific id
         app.get('/feedback', async (req, res) => {
@@ -72,6 +72,21 @@ async function run() {
             if (req.query.service) {
                 query = {
                     service: req.query.service
+                }
+            }
+            const cursor = feedbackCollection.find(query)
+            const feedback = await cursor.toArray();
+            res.send(feedback);
+        })
+
+        //my review
+         //get data from specific id
+         app.get('/feedback', async (req, res) => {
+            console.log(req.query.email)
+            let query = {}
+            if (req.query.email) {
+                query = {
+                    email: req.query.email
                 }
             }
             const cursor = feedbackCollection.find(query)
