@@ -21,6 +21,7 @@ async function run() {
     try {
         const serViceCollection = client.db("personService").collection("Service");
         const feedbackCollection = client.db("personService").collection("feedback");
+        // const addServiceCollection = client.db("personService").collection("addServices");
 
         // get only 3  data
         app.get('/Service', async (req, res) => {
@@ -28,6 +29,15 @@ async function run() {
             const cursor = serViceCollection.find(query)
             const service = await cursor.limit(3).toArray();
             res.send(service);
+        })
+
+        //add new service in services collection
+        app.post('/Service', async(req,res)=>{
+            console.log(`hggd`)
+            console.log(req.body)
+            const  add = req.body;
+            const resualt =  await serViceCollection.insertOne(add);
+            res.send(resualt);
         })
 
         //all data get
@@ -46,8 +56,6 @@ async function run() {
             const details = await serViceCollection.findOne(query);
             res.send(details)
         })
-
-
 
         //feedback api create data
         app.post('/feedback', async (req, res) => {
@@ -69,6 +77,8 @@ async function run() {
             const feedback = await cursor.toArray();
             res.send(feedback);
         })
+
+        
     }
     finally {
 
