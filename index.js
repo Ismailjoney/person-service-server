@@ -57,7 +57,7 @@ async function run() {
             res.send(details)
         })
 
-        //feedback api create data
+        //feedback api create data :
         app.post('/feedback', async (req, res) => {
             const feedback = req.body;
             const resualt = await feedbackCollection.insertOne(feedback);
@@ -65,7 +65,7 @@ async function run() {
         })
          
 
-        //get data from specific id
+        //get data from specific id :
         app.get('/feedback', async (req, res) => {
             console.log(req.query.service)
             let query = {}
