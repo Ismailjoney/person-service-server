@@ -16,61 +16,61 @@ app.use(express.json());
 
 const uri = "mongodb+srv://singleServicePerson:woACBICuRwoABbKw@cluster0.i8hxp3j.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
- 
-async function run (){
+
+async function run() {
     try {
         const serViceCollection = client.db("personService").collection("Service");
         const feedbackCollection = client.db("personService").collection("feedback");
 
         // get only 3  data
-        app.get('/Service',async(req,res)=>{
+        app.get('/Service', async (req, res) => {
             const query = {}
             const cursor = serViceCollection.find(query)
-            const  service = await cursor.limit(3).toArray();
+            const service = await cursor.limit(3).toArray();
             res.send(service);
         })
-        
+
         //all data get
-        app.get('/allServices',async(req,res)=>{
+        app.get('/allServices', async (req, res) => {
             const query = {}
             const cursor = serViceCollection.find(query)
-            const  allServices = await cursor.toArray();
+            const allServices = await cursor.toArray();
             res.send(allServices);
         })
+
+
         // get specific data details
-        app.get(`/details/:id`, async (req,res) => {
+        app.get(`/details/:id`, async (req, res) => {
             const id = req.params.id;
-            console.log(id)
-            const query = {_id: ObjectId(id)};
-            const  details = await serViceCollection.findOne(query);
-            console.log(details)
+            const query = { _id: ObjectId(id) };
+            const details = await serViceCollection.findOne(query);
             res.send(details)
         })
 
+
+
         //feedback api create data
-        app.post('/feedback', async(req,res)=>{
-            console.log(req.query.email)
-            let query = {}
-            if(req.query.email){
-                 query = {
-                    email: req.query.email
-                 }
-        }
-            const feedback =  feedbackCollection.find(query);
+        app.post('/feedback', async (req, res) => {
+            const feedback = req.body;
             const resualt = await feedbackCollection.insertOne(feedback);
             res.send(resualt)
         })
-        
-    //get data
-        app.get('/feedback',async(req,res)=>{
-            const query ={}
+
+        //get data from specific id
+        app.get('/feedback', async (req, res) => {
+            console.log(req.query.service)
+            let query = {}
+            if (req.query.service) {
+                query = {
+                    service: req.query.service
+                }
+            }
             const cursor = feedbackCollection.find(query)
-            const  allFeedback = await cursor.toArray();
-   
-            res.send(allFeedback);
+            const feedback = await cursor.toArray();
+            res.send(feedback);
         })
     }
-    finally{
+    finally {
 
     }
 }
@@ -83,7 +83,7 @@ run().catch(err => console.log(err))
 
 
 
-app.get('/',(req,res)=> {
+app.get('/', (req, res) => {
     res.send(`Single service running`)
 })
 
