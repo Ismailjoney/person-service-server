@@ -63,6 +63,7 @@ async function run() {
             const resualt = await feedbackCollection.insertOne(feedback);
             res.send(resualt)
         })
+        const {user} = useContext(AuthorContext)
 
         //get data from specific id
         app.get('/feedback', async (req, res) => {
