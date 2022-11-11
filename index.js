@@ -2,26 +2,25 @@ const express = require(`express`)
 const cors = require('cors')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
+require('dotenv').config();
+
 const port = process.env.PORT || 5000;
 
 //middleware
 app.use(cors())
 app.use(express.json());
 
-//singleServicePerson
-// woACBICuRwoABbKw
 
 
-
-
-const uri = "mongodb+srv://singleServicePerson:woACBICuRwoABbKw@cluster0.i8hxp3j.mongodb.net/?retryWrites=true&w=majority";
+const uri =  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.i8hxp3j.mongodb.net/?retryWrites=true&w=majority`;
+console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
     try {
         const serViceCollection = client.db("personService").collection("Service");
         const feedbackCollection = client.db("personService").collection("feedback");
-        // const addServiceCollection = client.db("personService").collection("addServices");
+         
 
         // get only 3  data
         app.get('/Service', async (req, res) => {
