@@ -79,7 +79,7 @@ async function run() {
             res.send(feedback);
         })
 
-        //my review
+         
          //get data from specific id
          app.get('/feedback', async (req, res) => {
             console.log(req.query.email)
