@@ -13,7 +13,7 @@ app.use(express.json());
 
 
 const uri =  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.i8hxp3j.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
+ 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
@@ -32,8 +32,6 @@ async function run() {
 
         //add new service in services collection
         app.post('/Service', async(req,res)=>{
-            console.log(`hggd`)
-            console.log(req.body)
             const  add = req.body;
             const resualt =  await serViceCollection.insertOne(add);
             res.send(resualt);
@@ -71,6 +69,20 @@ async function run() {
             if (req.query.service) {
                 query = {
                     service: req.query.service
+                }
+            }
+            const cursor = feedbackCollection.find(query)
+            const feedback = await cursor.toArray();
+            res.send(feedback);
+        })
+
+        //getown review user
+        app.get('/feedback', async (req, res) => {
+            
+            let query = {}
+            if (req.query.email) {
+                query = {
+                    service: req.query.email
                 }
             }
             const cursor = feedbackCollection.find(query)
